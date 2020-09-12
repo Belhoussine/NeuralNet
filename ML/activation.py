@@ -1,6 +1,6 @@
 import numpy as np
 
-# Logistic activation function (scaling numbers between 0 and 1 non-linearly)
+# Logistic a    ctivation function (scaling numbers between 0 and 1 non-linearly)
 def sigmoid(layer):
     return 1/(1 + np.exp(-layer))
 
