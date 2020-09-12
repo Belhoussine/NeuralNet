@@ -2,7 +2,7 @@
 
 ## Neural Networks
 
-1. Neural Network:
+### 1. Neural Network:
 
     - [x] Supports any number of layers
     - [x] Supports any number of neurons per layer
@@ -13,7 +13,7 @@
     - [ ] Train in Epochs
     - [ ] Verbose training phase 
 
-2. Activation Functions:
+### 2. Activation Functions:
 
     - [x] Sigmoid (Non linear mapping between 0 and 1)
     - [x] Softmax (Non Linear Probability Distribution)
@@ -22,7 +22,7 @@
     - [x] TanH (Hyperbolic Tangent)
     - [x] ELU (Exponential Linear Unit)
 
-3. Utility Functions:
+### 3. Utility Functions:
 
     - [x] Flatten (Convert 2D Matrix to vector)
     - [x] One Hot Encoding

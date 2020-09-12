@@ -1,26 +1,29 @@
 import numpy as np
 
-# Activation function (scaling numbers between 0 and 1 non-linearly)
-def sigmoid(x):
-    return 1/(1 + np.exp(-x))
+# Logistic activation function (scaling numbers between 0 and 1 non-linearly)
+def sigmoid(layer):
+    return 1/(1 + np.exp(-layer))
 
 
 # Map non normalized output to a probability distribution (Last layer)
-def softmax(vector):
-    return np.exp(vector) / sum(np.exp(vector))
+def softmax(layer):
+    return np.exp(layer) / sum(np.exp(layer))
 
 
 # ReLU (Rectified Linear Unit)
-def relu(vector):
-    return np.array([max(0, elem) for elem in vector])
+def relu(layer):
+    return np.array([max(0 * elem, elem) for elem in layer])
 
 
 # Leaky ReLU (Positive Linear Function Leaking on big Negative values)
-def leakyReLU(vector, alpha=0.01):
-    return np.array([max(alpha * elem, elem) for elem in vector])
+def leakyReLU(layer, alpha=0.01):
+    return np.array([max(alpha * elem, elem) for elem in layer])
 
 
 # Maps real valued input between -1 and 1 (S shape)
-def tanh(vector):
-    return np.tanh(vector)
+def tanh(layer):
+    return np.tanh(layer)
 
+# Exponential Linear Unit
+def elu(layer):
+    return 
