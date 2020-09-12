@@ -60,8 +60,8 @@ def activate(layer, activation):
         return relu(layer)
     if(activation.lower() == 'tanh'):
         return tanh(layer)
-    if(activation.lower() == 'tanh'):
-        return tanh(layer)
+    if(activation.lower() == 'elu'):
+        return elu(layer)
 
 
 # Mapping values between 0 and 1 (Linear Mapping)
