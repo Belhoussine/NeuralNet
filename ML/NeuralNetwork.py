@@ -9,20 +9,26 @@ class NeuralNetwork:
         self.layers = layers
         self.weight_shapes = [(a, b) for a, b in zip(self.layers[1:], self.layers[:-1])]
         self.weights = [np.random.standard_normal(shape)/shape[1]**0.5 for shape in self.weight_shapes]
-        self.biases = [np.zeros((s, 1)) for s in layers[1:]]
+        self.biases = [np.zeros((shape, 1)) for shape in layers[1:]]
 
-    def train(self, training_set, training_labels, iterations):
-        pass
 
-    # Forward Propagation algorithm
-    def forward(self, a):
-        a = np.expand_dims(np.array(a), axis = 1)
+    # Training the Model
+    # def train(self, training_set, training_labels, iterations):
+    #     for iteration in range(iterations):
+    #         self.forwardProp(training_set)
+    #         self.backProp()
+
+
+    # Prediction -Forward Propagation- algorithm
+    def predict(self, a):
         for (w, b, f) in zip(self.weights, self.biases, self.activation):
-            print(a.shape, w.shape, b.shape, f)
+            # print(a.shape, w.shape, b.shape, f)
             a = activate(np.matmul(w, a) + b, f)
-            print(a, '\n')
+            # print(a, '\n')
         return a
 
+
+    # Representation of the Neural Network
     def __repr__(self):
         print(f"Layers: {self.layers} \n")
 
@@ -33,5 +39,6 @@ class NeuralNetwork:
         print(f"Biases:")
         for i, bias in enumerate(self.biases, start=1):
             print(f" Layer {i}: {bias.shape}\n {bias}\n")
+        
         return '\n'
     

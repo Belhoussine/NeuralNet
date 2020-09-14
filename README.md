@@ -25,6 +25,7 @@
 
 - [x] Flatten (Convert 2D Matrix to vector)
 - [x] One Hot Encoding
+- [x] Normalization Function
 - [x] Accurary function
 - [x] Loss functions:
     * Root Mean Squared Error
