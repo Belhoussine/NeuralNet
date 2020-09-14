@@ -1,7 +1,9 @@
 #!/bin/python3
 
-from ML import NeuralNetwork, loadMNIST, flatten, normalize, RMSE, MSE,oneHotEncoding
-import random
+import ML
+from ML.NeuralNetwork import NeuralNetwork
+from ML.loss import *
+from ML.utils import loadMNIST, flatten, oneHotEncoding
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -21,11 +23,7 @@ activation = ('leakyrelu', 'tanh', 'softmax')
 nn = NeuralNetwork(layers, activation)
 
 prediction = nn.predict(training_images[0])
-print(f'Prediction: {np.argmax(prediction)}')
-print(f'Actual Number: {np.argmax(training_labels[0])}')
+label = training_labels[0]
 
-print(prediction)
-print(training_labels[0])
-rmse = RMSE(prediction, training_labels[0])
-mse = MSE(prediction, training_labels[0])
-print(mse, rmse)
+loss = logcosh(prediction,label)
+print(loss)

@@ -25,5 +25,5 @@ def tanh(layer):
     return np.tanh(layer)
 
 # Exponential Linear Unit
-def elu(layer):
-    return 
+def elu(layer, alpha = 0.01):
+    return ([elem if elem >= 0 else alpha*(np.exp(elem) -1) for elem in layer])

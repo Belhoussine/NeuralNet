@@ -1,10 +1,11 @@
 import numpy as np
-from .activation import softmax, sigmoid, leakyReLU
-from .utils import oneHotEncoding, activate
+from .utils import activate
 
 class NeuralNetwork:
     # Initializing number of layers and their shapes and randomizing weights
     def __init__(self, layers, activation):
+        self.__activationFunctions = ['Sigmoid', 'Softmax', 'ReLU', 'LeakyReLU', 'elu', 'tanh']
+        self.__lossFunctions = ['RMSE', 'MSE', 'MAE', 'huber', 'logcosh']
         self.activation = activation
         self.layers = layers
         self.weight_shapes = [(a, b) for a, b in zip(self.layers[1:], self.layers[:-1])]
@@ -13,20 +14,36 @@ class NeuralNetwork:
 
 
     # Training the Model
-    # def train(self, training_set, training_labels, iterations):
-    #     for iteration in range(iterations):
-    #         self.forwardProp(training_set)
-    #         self.backProp()
+    def train(self, training_set, training_labels, iterations):
+        for i in range(iterations):
+            self.forwardProp(training_set)
+            self.backProp()
 
 
-    # Prediction -Forward Propagation- algorithm
-    def predict(self, a):
+    def predict(self, input_layer):
+        return self.forwardProp(input_layer)  
+
+    # Forward Propagation algorithm
+    def forwardProp(self, input_layer):
         for (w, b, f) in zip(self.weights, self.biases, self.activation):
-            # print(a.shape, w.shape, b.shape, f)
-            a = activate(np.matmul(w, a) + b, f)
-            # print(a, '\n')
-        return a
+            # print(input_layer.shape, w.shape, b.shape, f)
+            input_layer = activate(np.matmul(w, input_layer) + b, f)
+            # print(input_layer, '\n')
+        return input_layer
 
+
+    # Backward Propagation algorithm
+    def backProp(self):
+        pass
+
+    # Displaying Activation functions
+    def activationFunctions(self):
+        return self.__activationFunctions
+
+
+    # Displaying Loss functions
+    def lossFunctions(self):
+        return self.__lossFunctions
 
     # Representation of the Neural Network
     def __repr__(self):

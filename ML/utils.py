@@ -22,29 +22,9 @@ def normalize(layer):
         return  np.array([((elem - mini) / (maxi - mini)) for elem in layer])
         
 
-
 # Converting numerical value N to binary array where Nth cell is 1 and rest is 0
 def oneHotEncoding(label):
     return np.expand_dims([1 if i == label else 0 for i in range(10)], axis = 1)
-
-# Mean Squared Error (loss function)
-def MSE(prediction, label):
-    loss = sum([mse(a, b) for a, b in zip(prediction, label)])
-    return np.array(loss)
-
-# MSE helper function
-def mse(predicted, actual):
-    return (predicted - actual) ** 2
-
-
-# Root Mean Squared Error (loss function)
-def RMSE(prediction, label):
-    loss = sum([rmse(a, b) for a, b in zip(prediction, label)])
-    return np.array(loss)
-    
-# RMSE helper function
-def rmse(predicted, actual):
-    return np.sqrt(mse(predicted, actual))
 
 
 # Applying chosen activation function on given layer
