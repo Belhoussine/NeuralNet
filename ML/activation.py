@@ -16,7 +16,7 @@ def relu(layer):
 
 
 # Leaky ReLU (Positive Linear Function Leaking on big Negative values)
-def leakyReLU(layer, alpha=0.01):
+def leakyrelu(layer, alpha=0.01):
     return np.array([max(alpha * elem, elem) for elem in layer])
 
 

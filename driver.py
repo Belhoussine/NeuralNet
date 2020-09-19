@@ -2,28 +2,31 @@
 
 import ML
 from ML.NeuralNetwork import NeuralNetwork
-from ML.loss import *
-from ML.utils import loadMNIST, flatten, oneHotEncoding
-import numpy as np
-import matplotlib.pyplot as plt
+from ML.utils import loadMNIST, flatten, ohe, computeLoss
+import random
 
+# Importing Dataset and Splitting it
 (train_img, train_labels), (test_img, test_labels) = loadMNIST()
 
-#Data Processing
+# Data Processing
 training_images = flatten(train_img, normalize = True)
-training_labels = np.array([oneHotEncoding(label) for label in train_labels])
+training_labels = ohe(train_labels)
 
-#Defining parameters
+# Defining Model Parameters
 num_classes = 10
-input_shape = (784, 1)
-layers = (input_shape[0], 50, 20, num_classes)
+input_shape = (784, 1) 
+layers = (input_shape[0], 5, num_classes)
 activation = ('leakyrelu', 'tanh', 'softmax')
+loss = 'mse'
 
-#Creating the model
-nn = NeuralNetwork(layers, activation)
+# Creating the model
+nn = NeuralNetwork(layers = layers, activation = activation, loss = loss)
 
-prediction = nn.predict(training_images[0])
 label = training_labels[0]
+prediction = nn.forwardProp(training_images[0], label)
 
-loss = logcosh(prediction,label)
-print(loss)
+# print(f'Predicted value: {oneHotDecoding(prediction)}')
+# print(f'Actual value: {oneHotDecoding(label)}')
+
+# print(prediction)
+# print(label)

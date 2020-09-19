@@ -1,6 +1,7 @@
 import numpy as np
+from . import NeuralNetwork as nn
+from .loss import *
 from .activation import *
-
 
 # Number of correct predictions over total predictions
 def accuracy(predictions, labels):
@@ -26,22 +27,26 @@ def normalize(layer):
 def oneHotEncoding(label):
     return np.expand_dims([1 if i == label else 0 for i in range(10)], axis = 1)
 
+def ohe(labels):
+    return np.array([oneHotEncoding(label) for label in labels])
+
+# Reversing One Hot Encoding Algorithm
+def oneHotDecoding(encoded):
+    return np.argmax(encoded)
 
 # Applying chosen activation function on given layer
 def activate(layer, activation):
-    if(activation.lower() == 'sigmoid'):
-        return sigmoid(layer)
-    if(activation.lower() == 'softmax'):
-        return softmax(layer)
-    if(activation.lower() == 'leakyrelu'):
-        return leakyReLU(layer)
-    if(activation.lower() == 'relu'):
-        return relu(layer)
-    if(activation.lower() == 'tanh'):
-        return tanh(layer)
-    if(activation.lower() == 'elu'):
-        return elu(layer)
+    keys = [key.lower() for key in nn.NeuralNetwork.activationFunctions()]
+    values = [eval(key.lower()) for key in keys]
+    activationMapping = dict(zip(keys, values))
+    return activationMapping[activation.lower()](layer)
 
+# Computing Loss Depending on chosen Loss function
+def computeLoss(prediction, label, lossFunction):
+    keys = [key.lower() for key in nn.NeuralNetwork.lossFunctions()]
+    values = [eval(key.lower()) for key in keys]
+    lossMapping = dict(zip(keys, values))
+    return lossMapping[lossFunction.lower()](prediction, label)
 
 # Loading MNIST Data Set
 def loadMNIST():
