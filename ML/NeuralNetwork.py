@@ -1,13 +1,13 @@
 import numpy as np
-from .utils import activate, computeLoss
+from .utils import activate, computeLoss, shuffle
 
 class NeuralNetwork:
 
     # Initializing number of layers and their shapes and randomizing weights
-    def __init__(self, layers, activation, loss = 'mse'):
+    def __init__(self, layers, activations, loss, optimization):
         # Getting Parameters from User
         self.layers = layers
-        self.activation = activation
+        self.activations = activations
         self.loss = loss
 
         # Creating Weights and Biases
@@ -17,38 +17,42 @@ class NeuralNetwork:
 
 
     # Training the Model
-    def train(self, training_set, training_labels, iterations, batchsize = 1):
+    def train(self, training_set, training_labels, epochs = 10, batchsize = 10):
         loss = 0
-        for i in range(iterations):
+        for epoch in range(epochs):
+            training_data = shuffle(training_set, training_labels)
+            print(f'EPOCH {epoch}:')
             # Looping Over the whole dataset
-            for input_layer, label in zip(training_set, training_labels):
-                loss += self.forwardProp(input_layer, label)
-            
-            self.backProp(loss)
+            for index, (input_data, label) in enumerate(training_data):
+                prediction, label = self.forwardProp(input_data, label)
+                loss += computeLoss(prediction, label, self.loss)
+                
+                if((index + 1) % batchsize == 0 or index+1 == len(training_data)):
+                    print(index, loss / batchsize)
+                    self.backProp(loss / batchsize)
+                    loss = 0
 
 
     # Prediction Algorithm
     def predict(self, a):
-        for (w, b, f) in zip(self.weights, self.biases, self.activation):
-            print(a.shape, w.shape, b.shape, f)
+        for (w, b, f) in zip(self.weights, self.biases, self.activations):
+            # print(a.shape, w.shape, b.shape, f)
             a = activate(np.matmul(w, a) + b, f)
-            print(a, '\n')
+            # print(a, '\   n')        
         return a
+
 
     # Forward Propagation algorithm
     def forwardProp(self, input_layer, label):
         activated = input_layer
         # Propagating Values and Activating Neurons
-        for (w, b, f) in zip(self.weights, self.biases, self.activation):
-            print(activated.shape, w.shape, b.shape, f)
+        for (w, b, f) in zip(self.weights, self.biases, self.activations):
+            # print(activated.shape, w.shape, b.shape, f)
             activated = activate(np.matmul(w, activated) + b, f)
-            print(activated, '\n')
+            # print(activated, '\n')
 
         prediction = activated
-        loss = computeLoss(prediction, label, self.loss)
-        print(f'Loss function: {self.loss} ==>', loss)
-        return loss
-
+        return (prediction, label)
 
     # Backward Propagation algorithm
     def backProp(self, loss):

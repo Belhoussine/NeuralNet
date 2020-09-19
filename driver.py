@@ -2,7 +2,7 @@
 
 import ML
 from ML.NeuralNetwork import NeuralNetwork
-from ML.utils import loadMNIST, flatten, ohe, computeLoss
+from ML.utils import loadMNIST, flatten, ohe, computeLoss, oneHotDecoding
 import random
 
 # Importing Dataset and Splitting it
@@ -10,23 +10,23 @@ import random
 
 # Data Processing
 training_images = flatten(train_img, normalize = True)
-training_labels = ohe(train_labels)
+training_labels = ohe(train_labels, 10)
 
-# Defining Model Parameters
+# Problem specific Parameters
 num_classes = 10
 input_shape = (784, 1) 
-layers = (input_shape[0], 5, num_classes)
-activation = ('leakyrelu', 'tanh', 'softmax')
-loss = 'mse'
+
+# Defining Model Parameters
+layers = (input_shape[0], 5, 3, num_classes)
+activations = ('leakyrelu', 'tanh', 'sigmoid')
+loss = 'rmse'
+optimization = 'sgd'
 
 # Creating the model
-nn = NeuralNetwork(layers = layers, activation = activation, loss = loss)
+nn = NeuralNetwork(layers = layers, activations = activations, loss = loss, optimization = optimization)
+
+nn.train(training_images[:100], training_labels[:100], epochs = 2, batchsize = 17)
 
 label = training_labels[0]
-prediction = nn.forwardProp(training_images[0], label)
+prediction = nn.predict(training_images[0])
 
-# print(f'Predicted value: {oneHotDecoding(prediction)}')
-# print(f'Actual value: {oneHotDecoding(label)}')
-
-# print(prediction)
-# print(label)
