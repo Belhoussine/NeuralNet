@@ -1,32 +1,41 @@
 import numpy as np
-from .utils import activate, computeLoss, shuffle
+from .utils import activate, computeLoss, optimize, shuffle, write, colors
+
 
 class NeuralNetwork:
 
     # Initializing number of layers and their shapes and randomizing weights
-    def __init__(self, layers, activations, loss, optimization):
+    def __init__(self, layers, activations, loss, optimizer):
         # Getting Parameters from User
         self.layers = layers
         self.activations = activations
         self.loss = loss
+        self.optimizer = optimizer
 
+        write('[ ] Initializing weights and biases...', color = colors.INFO, clear = False)
         # Creating Weights and Biases
         self.weight_shapes = [(a, b) for a, b in zip(self.layers[1:], self.layers[:-1])]
         self.weights = [np.random.standard_normal(shape)/shape[1]**0.5 for shape in self.weight_shapes]
         self.biases = [np.zeros((shape, 1)) for shape in layers[1:]]
 
+        write('[x] Weights and Biases initialized successfully.\n', color = colors.SUCCESS, wait = 0.5)
+        write('', wait = 0.5)
 
     # Training the Model
     def train(self, training_set, training_labels, epochs = 10, batchsize = 10):
         loss = 0
+        
+        # Training for number of epochs
         for epoch in range(epochs):
             training_data = shuffle(training_set, training_labels)
             print(f'EPOCH {epoch}:')
-            # Looping Over the whole dataset
+            # Looping over the whole dataset in each epoch
             for index, (input_data, label) in enumerate(training_data):
                 prediction, label = self.forwardProp(input_data, label)
                 loss += computeLoss(prediction, label, self.loss)
-                
+                # Back propagate every batch size:
+                # Batch size is 1 for SGD
+                # Batch size is len(training_set) for batchGD
                 if((index + 1) % batchsize == 0 or index+1 == len(training_data)):
                     print(index, loss / batchsize)
                     self.backProp(loss / batchsize)
@@ -57,6 +66,7 @@ class NeuralNetwork:
     # Backward Propagation algorithm
     def backProp(self, loss):
         pass
+        optimize(loss, self.optimizer)
 
     # Displaying Activation functions
     @staticmethod
@@ -67,6 +77,11 @@ class NeuralNetwork:
     @staticmethod  
     def lossFunctions():
         return ['MSE', 'SSE', 'RMSE', 'MAE', 'huber', 'logcosh']
+
+    # Displaying Loss functions
+    @staticmethod  
+    def optimizers():
+        return ['SGD', 'gradientdescent', 'minibatchGD', 'adam', 'RMSProp']
 
     # Representation of the Neural Network
     def __repr__(self):

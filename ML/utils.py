@@ -1,8 +1,26 @@
 import numpy as np
 import random
+import urllib3
+import io
 from . import NeuralNetwork as nn
 from .loss import *
 from .activation import *
+from .optimization import *
+import sys
+from time import sleep
+
+
+# Defining colors for display messages
+class colors:
+    HEADER = '\033[95m'
+    INFO = '\033[94m'
+    SUCCESS = '\033[92m'
+    WARNING = '\033[93m'
+    ERROR = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
 
 # Number of correct predictions over total predictions
 def accuracy(predictions, labels):
@@ -53,11 +71,37 @@ def computeLoss(prediction, label, lossFunction):
     return lossMapping[lossFunction.lower()](prediction, label)
 
 
+# Applying given optimization algorithm for backpropagation
+def optimize(loss, optimizer = 'adam'):
+    if(optimizer.lower() in ['sgd', 'batchGD', 'minibatchgd', 'gradientdescent']):
+        gradientdescent()
+
+    if(optimizer.lower() == 'adam'):
+        adam()
+
+    if(optimizer.lower() == 'rmsprop'):
+        rmsprop()
+
 # Loading MNIST Data Set
+# https://storage.googleapis.com/tensorflow/tf-keras-datasets/mnist.npz
 def loadMNIST():
-    mnist = np.load('./MNIST/mnist.npz')
+    # Request bytes from server
+    url = 'https://storage.googleapis.com/tensorflow/tf-keras-datasets/mnist.npz'
+    http  = urllib3.PoolManager()
+    write('[ ] Loading MNIST Dataset from server...', color = colors.INFO, clear = False)
+    r = http.request('GET', url)
+    data = r.data
+
+    # Turn it to file-like object
+    write('[ ] Unzipping files...', color = colors.INFO)
+    file_like_object = io.BytesIO(data)
+    del data
+
+    # Unzip and Split data
+    mnist = np.load(file_like_object)
     train_img, train_labels = mnist['x_train'], mnist['y_train'] 
     test_img, test_labels = mnist['x_test'], mnist['y_test']
+    write('[x] Dataset loaded successfully.', color = colors.SUCCESS)
     return (train_img, train_labels), (test_img, test_labels)
 
 
@@ -66,3 +110,16 @@ def shuffle(training_set, training_labels):
     training_data = list(zip(training_set, training_labels))
     random.shuffle(training_data)
     return training_data
+
+
+# Overrides text on same line
+def write(string, color = colors.ENDC, wait = 0.5, clear = True):
+    sleep(wait)
+    if clear: 
+        clearLine()
+    print(f'{color}{string}{colors.ENDC}')
+
+# Clears Line 
+def clearLine():
+    sys.stdout.write("\033[F\033[K")
+    sys.stdout.flush()

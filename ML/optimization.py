@@ -3,6 +3,7 @@ def gradientdescent():
     pass
 
 
+
 # Adaptive Moment Estimation
 def adam():
     pass

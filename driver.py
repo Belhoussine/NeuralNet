@@ -20,10 +20,10 @@ input_shape = (784, 1)
 layers = (input_shape[0], 5, 3, num_classes)
 activations = ('leakyrelu', 'tanh', 'sigmoid')
 loss = 'rmse'
-optimization = 'sgd'
+optimizer = 'sgd'
 
 # Creating the model
-nn = NeuralNetwork(layers = layers, activations = activations, loss = loss, optimization = optimization)
+nn = NeuralNetwork(layers = layers, activations = activations, loss = loss, optimizer = optimizer)
 
 nn.train(training_images[:100], training_labels[:100], epochs = 2, batchsize = 17)
 

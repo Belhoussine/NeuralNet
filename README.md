@@ -40,8 +40,6 @@
 - [ ] Mini-Batch Gradient Descent
 - [ ] ADAM (Adaptive Moment Estimation)
 - [ ] RMSProp
-- [ ] TanH (Hyperbolic Tangent)
-- [ ] ELU (Exponential Linear Unit)
 
 ### 4. Utility Functions:
 
