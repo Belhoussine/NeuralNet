@@ -1,9 +1,8 @@
 #!/bin/python3
 
-import ML
-from ML.NeuralNetwork import NeuralNetwork
-from ML.utils import loadMNIST, flatten, ohe, computeLoss, oneHotDecoding
-import random
+# import NeuralNet
+from NeuralNet.NeuralNetwork import NeuralNetwork
+from NeuralNet.utils import loadMNIST, flatten, ohe, computeLoss, oneHotDecoding
 
 # Importing Dataset and Splitting it
 (train_img, train_labels), (test_img, test_labels) = loadMNIST()
@@ -25,7 +24,7 @@ optimizer = 'sgd'
 # Creating the model
 nn = NeuralNetwork(layers = layers, activations = activations, loss = loss, optimizer = optimizer)
 
-nn.train(training_images[:100], training_labels[:100], epochs = 2, batchsize = 17)
+nn.train(training_images, training_labels, epochs = 2, batchsize = 17)
 
 label = training_labels[0]
 prediction = nn.predict(training_images[0])

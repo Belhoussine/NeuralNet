@@ -1,5 +1,5 @@
 import numpy as np
-from .utils import activate, computeLoss, optimize, shuffle, write, colors
+from .utils import activate, computeLoss, optimize, shuffle, write, colors, progressBar
 
 
 class NeuralNetwork:
@@ -9,8 +9,8 @@ class NeuralNetwork:
         # Getting Parameters from User
         self.layers = layers
         self.activations = activations
-        self.loss = loss
-        self.optimizer = optimizer
+        self.loss = loss.lower()
+        self.optimizer = optimizer.lower()
 
         write('[ ] Initializing weights and biases...', color = colors.INFO, clear = False)
         # Creating Weights and Biases
@@ -18,26 +18,29 @@ class NeuralNetwork:
         self.weights = [np.random.standard_normal(shape)/shape[1]**0.5 for shape in self.weight_shapes]
         self.biases = [np.zeros((shape, 1)) for shape in layers[1:]]
 
-        write('[x] Weights and Biases initialized successfully.\n', color = colors.SUCCESS, wait = 0.5)
-        write('', wait = 0.5)
+        write('[x] Weights and Biases initialized successfully.\n', color = colors.SUCCESS, wait = 0.7)
+        write('\n', wait = 0.5)
 
     # Training the Model
-    def train(self, training_set, training_labels, epochs = 10, batchsize = 10):
+    def train(self, training_set, training_labels, epochs = 10, batchsize = 20):
         loss = 0
-        
+        batchsize = 1 if self.loss == 'sgd' else batchsize
+        batchsize = len(training_set) if self.loss == 'batchgd' else batchsize
         # Training for number of epochs
         for epoch in range(epochs):
             training_data = shuffle(training_set, training_labels)
-            print(f'EPOCH {epoch}:')
+            write(f'EPOCH {epoch}:\n', wait = 0, color = colors.INFO, clear = False)
+
             # Looping over the whole dataset in each epoch
             for index, (input_data, label) in enumerate(training_data):
+                progressBar(current = index+1, total = len(training_set), limit = 30)
+
                 prediction, label = self.forwardProp(input_data, label)
                 loss += computeLoss(prediction, label, self.loss)
                 # Back propagate every batch size:
                 # Batch size is 1 for SGD
                 # Batch size is len(training_set) for batchGD
                 if((index + 1) % batchsize == 0 or index+1 == len(training_data)):
-                    print(index, loss / batchsize)
                     self.backProp(loss / batchsize)
                     loss = 0
 
@@ -65,8 +68,8 @@ class NeuralNetwork:
 
     # Backward Propagation algorithm
     def backProp(self, loss):
-        pass
-        optimize(loss, self.optimizer)
+        for i in reversed(range(len((self.weights, self.biases)))):
+            optimize((self.weights, self.biases), loss, self.optimizer)
 
     # Displaying Activation functions
     @staticmethod

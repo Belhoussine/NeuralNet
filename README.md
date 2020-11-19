@@ -1,6 +1,13 @@
 # Machine Learning Library
+## Usage Notes:
+Python3 is needed to use this library.
+```
+git clone https://github.com/Belhoussine/NeuralNet
+cd NeuralNet
+pip3 install requirements.txt
+```
 
-## Neural Networks
+## Neural Network Specifications
 
 ### 1. Artificial Neural Network:
 - [x] Supports multiple layers
@@ -11,7 +18,7 @@
     - [x] Run in Epochs
     - [x] Supports mini batches
 - [x] Predict
-- [ ] Verbose training phase 
+- [x] Verbose training phase 
 
 ### 2. Activation Functions:
 
@@ -38,11 +45,13 @@
 - [ ] Batch Gradient Descent
 - [ ] SGD (Stochastic Gradient Descent)
 - [ ] Mini-Batch Gradient Descent
+- [ ] General Purpose Gradient Descent
 - [ ] ADAM (Adaptive Moment Estimation)
 - [ ] RMSProp
 
 ### 4. Utility Functions:
 
+- [x] Download MNIST dataset from remote server
 - [x] Flatten (Convert 2D Matrix to vector)
 - [x] One Hot Encoding (Convert numerical to categorical)
 - [x] One Hot Decoding (Convert categorical to numerical)

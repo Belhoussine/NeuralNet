@@ -72,15 +72,16 @@ def computeLoss(prediction, label, lossFunction):
 
 
 # Applying given optimization algorithm for backpropagation
-def optimize(loss, optimizer = 'adam'):
+def optimize(layer, loss, optimizer = 'adam'):
     if(optimizer.lower() in ['sgd', 'batchGD', 'minibatchgd', 'gradientdescent']):
-        gradientdescent()
+        gradientdescent(layer, loss)
 
     if(optimizer.lower() == 'adam'):
-        adam()
+        adam(layer, loss)
 
     if(optimizer.lower() == 'rmsprop'):
-        rmsprop()
+        rmsprop(layer, loss)
+
 
 # Loading MNIST Data Set
 # https://storage.googleapis.com/tensorflow/tf-keras-datasets/mnist.npz
@@ -123,3 +124,9 @@ def write(string, color = colors.ENDC, wait = 0.5, clear = True):
 def clearLine():
     sys.stdout.write("\033[F\033[K")
     sys.stdout.flush()
+
+# Displays a progress bar
+def progressBar(current, total, limit = 30):
+    progress = round(current / total * limit)
+    bar = f'{round(current/total*100)}% |{"=" * progress}>{"." * (limit - progress)}| {current}/{total}'
+    write(bar , wait = 0, color = colors.WARNING )
