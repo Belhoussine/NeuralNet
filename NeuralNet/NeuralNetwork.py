@@ -1,9 +1,7 @@
 import numpy as np
-from .utils import activate, computeLoss, optimize, shuffle, write, colors, progressBar
-
+from NeuralNet.utils import activate, computeLoss, optimize, shuffle, write, colors, progressBar
 
 class NeuralNetwork:
-
     # Initializing number of layers and their shapes and randomizing weights
     def __init__(self, layers, activations, loss, optimizer):
         # Getting Parameters from User
@@ -18,8 +16,13 @@ class NeuralNetwork:
         self.weights = [np.random.standard_normal(shape)/shape[1]**0.5 for shape in self.weight_shapes]
         self.biases = [np.zeros((shape, 1)) for shape in layers[1:]]
 
+
         write('[x] Weights and Biases initialized successfully.\n', color = colors.SUCCESS, wait = 0.7)
         write('\n', wait = 0.5)
+        print(self.weight_shapes)
+        print(self.weights)
+        print(self.biases)
+
 
     # Training the Model
     def train(self, training_set, training_labels, epochs = 10, batchsize = 20):
@@ -29,7 +32,7 @@ class NeuralNetwork:
         # Training for number of epochs
         for epoch in range(epochs):
             training_data = shuffle(training_set, training_labels)
-            write(f'EPOCH {epoch}:\n', wait = 0, color = colors.INFO, clear = False)
+            write(f'EPOCH {epoch+1}/{epochs}:\n', wait = 0, color = colors.INFO, clear = False)
 
             # Looping over the whole dataset in each epoch
             for index, (input_data, label) in enumerate(training_data):
@@ -68,7 +71,7 @@ class NeuralNetwork:
 
     # Backward Propagation algorithm
     def backProp(self, loss):
-        for i in reversed(range(len((self.weights, self.biases)))):
+        for _ in reversed(range(len((self.weights, self.biases)))):
             optimize((self.weights, self.biases), loss, self.optimizer)
 
     # Displaying Activation functions
@@ -87,16 +90,16 @@ class NeuralNetwork:
         return ['SGD', 'gradientdescent', 'minibatchGD', 'adam', 'RMSProp']
 
     # Representation of the Neural Network
-    def __repr__(self):
-        print(f"Layers: {self.layers} \n")
+    # def __str__(self):
+    #     print(f"Layers: {self.layers} \n")
 
-        print(f"Weights:")
-        for i, weight in enumerate(self.weights, start=1):
-            print(f" Layer {i}: {weight.shape}\n {weight}\n")
+    #     print(f"Weights:")
+    #     for i, weight in enumerate(self.weights, start=1):
+    #         print(f" Layer {i}: {weight.shape}\n {weight}\n")
 
-        print(f"Biases:")
-        for i, bias in enumerate(self.biases, start=1):
-            print(f" Layer {i}: {bias.shape}\n {bias}\n")
+    #     print(f"Biases:")
+    #     for i, bias in enumerate(self.biases, start=1):
+    #         print(f" Layer {i}: {bias.shape}\n {bias}\n")
         
-        return '\n'
+    #     return '\n'
     

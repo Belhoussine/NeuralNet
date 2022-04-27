@@ -1,6 +1,5 @@
 # Classical gradient descent
 def gradientdescent(layer, loss, alpha = 1):
-    print(layer)
     for i in range(len(layer)):
         # layer[i] = 
         pass

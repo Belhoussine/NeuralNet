@@ -2,10 +2,10 @@ import numpy as np
 import random
 import urllib3
 import io
-from . import NeuralNetwork as nn
-from .loss import *
-from .activation import *
-from .optimization import *
+import NeuralNet.NeuralNetwork as nn
+from NeuralNet.loss import *
+from NeuralNet.activation import *
+from NeuralNet.optimization import *
 import sys
 from time import sleep
 
